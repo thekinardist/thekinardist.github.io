@@ -1,0 +1,182 @@
+<html>
+
+<head>
+    <title>Instancing</title>
+    <meta charset="UTF-8" />
+    <script type="text/javascript" charset="UTF-8" src="../../libs/three/three.js"></script>
+    <script type="text/javascript" charset="UTF-8" src="../../libs/three/controls/TrackballControls.js"></script>
+    <script type="text/javascript" src="../../libs/util/Stats.js"></script>
+    <script type="text/javascript" src="../../libs/util/dat.gui.js"></script>
+
+    <script type="text/javascript" src="../js/util.js"></script>
+    <link rel="stylesheet" href="../../css/default.css">
+</head>
+
+<body>
+    <!-- Div which will hold the Output -->
+    <div id="webgl-output"></div>
+
+	
+	
+	<script type = "module">
+
+	var uniforms; 
+
+        init(); 
+        function init() {
+	window.addEventListener('resize', onResize, false); 
+	var stats = initStats(); 
+
+	// create a scene, that will hold all our elements such as objects, cameras and lights.
+	var scene = new THREE.Scene();
+  
+	// create a camera, which defines where we're looking at.
+	var camera = new THREE.PerspectiveCamera(45, window.innerWidth / window.innerHeight, 0.1, 1000);
+  
+	// create a render and configure it with shadows
+	var renderer = new THREE.WebGLRenderer();
+	renderer.setClearColor(new THREE.Color(0x000000));
+	renderer.setSize(window.innerWidth, window.innerHeight);
+	const myGroup = new THREE.Group();
+	// create a cube
+
+	
+      var controls = new function(){
+		this.rotationSpeed = 0.02; 
+		this.sclX = 1;
+		this.sclY = 1; 
+		this.sclZ = 1; 
+        this.a = 50; 
+        this.b = 50; 
+        this.n = 0.1; 
+	
+	};
+	var gui = new dat.GUI(); 
+ 
+	gui.add(controls,'sclX',1,10);
+	gui.add(controls,'sclY',1,10);
+	gui.add(controls,'sclZ',1,10);
+    gui.add(controls,'a',50,100); 
+    gui.add(controls,'b',50,100); 
+    gui.add(controls,'n',0.1,10); 
+      
+    function sgn(val){
+        if(val > 0){
+            return 1;
+        }else if(val<0){
+            return -1; 
+        }else{
+            return 0; 
+        }
+	}
+	
+	var geo = new THREE.BoxBufferGeometry(4,4,4); 
+	var root = new THREE.Mesh();
+	var cubeMaterial = new THREE.MeshNormalMaterial({
+		color: 0xFF0000
+      });
+
+	var dummy = new THREE.Object3D(); 
+	var cube = new THREE.InstancedMesh(geo,cubeMaterial,200); 
+	cube.instanceMatrix.setUsage(THREE.DynamicDrawUsage);
+	scene.add(cube);
+
+
+
+	// add the cube to the scene
+
+  
+	// position and point the camera to the center of the scene
+	camera.position.x = -30;
+	camera.position.y = 40;
+	camera.position.z = 30;
+	camera.lookAt(scene.position);
+  
+	// add spotlight for the shadows
+	var spotLight = new THREE.SpotLight(0xFFFFFF);
+	spotLight.position.set(-40, 40, -15);
+	spotLight.castShadow = true;
+	spotLight.shadow.mapSize = new THREE.Vector2(1024, 1024);
+	spotLight.shadow.camera.far = 130;
+	spotLight.shadow.camera.near = 40;
+  
+	scene.add(spotLight);
+  
+	var ambienLight = new THREE.AmbientLight(0x353535);
+	scene.add(ambienLight);
+  
+	// add the output of the renderer to the html element
+	document.getElementById("webgl-output").appendChild(renderer.domElement);
+
+	var step = 0;
+
+
+	var trackballControls = initTrackballControls(camera, renderer);
+	var clock = new THREE.Clock();
+
+    render();
+
+    function render() {
+		trackballControls.update(clock.getDelta());
+		stats.update();
+
+	
+
+		// root.traverse(function(cube){
+		// cube.position.x = controls.r;
+		// cube.position.y = controls.r; 
+	 
+			
+		// });
+		
+     
+      animate();
+	}
+
+	function animate(){
+
+		
+
+
+camera.lookAt( scene.position );
+
+		var time = Date.now() * 0.0001; 
+		if(cube){
+		var i = 0; 
+		for(let angle = 0; angle < 2*Math.PI; angle +=0.05){
+		var na = 2/controls.n;
+		var rx = Math.pow(Math.abs(Math.cos(angle)),na) * controls.a * sgn(Math.cos(angle));
+		var ry = Math.pow(Math.abs(Math.sin(angle)),na) * controls.b * sgn(Math.sin(angle)); 
+		dummy.position.set(rx,ry,0);
+		dummy.rotation.y =  ( Math.sin( (rx * 2) + time *2 ) + Math.sin( (ry * 2)+ time *2 ) ) ;
+		dummy.rotation.z = dummy.rotation.y * 2;
+		dummy.scale.x = controls.sclX; 
+		dummy.scale.y = controls.sclY; 
+		dummy.scale.z = controls.sclZ; 
+
+
+		dummy.updateMatrix(); 
+		cube.setMatrixAt(i++,dummy.matrix);
+		}
+
+		cube.instanceMatrix.needsUpdate = true; 
+
+		}
+		
+		 requestAnimationFrame(render);
+        renderer.render(scene, camera);
+	}
+	function onResize() {
+        camera.aspect = window.innerWidth / window.innerHeight;
+        camera.updateProjectionMatrix();
+        renderer.setSize(window.innerWidth, window.innerHeight);
+    } 
+}
+  
+ 
+
+    </script>
+      
+</body>
+
+</html>
