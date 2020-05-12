@@ -12,6 +12,17 @@
     <script type="text/javascript" src="../js/util.js"></script>
     <link rel="stylesheet" href="../../css/default.css">
 </head>
+	
+<style>
+	
+#webgl canvas{
+	    /* force the canvas to fill out the entire area */
+      width: 100%!important; height: 100%!important; 
+      
+      /* force the z-pos of the canvas to be on-top */
+      z-index: 0; 
+	}
+</style>
 
 <body>
     <!-- Div which will hold the Output -->
@@ -107,7 +118,7 @@
 	scene.add(ambienLight);
   
 	// add the output of the renderer to the html element
-	document.getElementById("webgl-output").appendChild(renderer.domElement);
+	document.getElementById("webgl").appendChild(renderer.domElement);
 
 	var step = 0;
 
