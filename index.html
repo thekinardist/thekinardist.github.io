@@ -37,7 +37,7 @@
 	var camera = new THREE.PerspectiveCamera(45, window.innerWidth / window.innerHeight, 0.1, 1000);
   
 	// create a render and configure it with shadows
-	var renderer = new THREE.WebGLRenderer();
+	var renderer = new THREE.WebGLRenderer({ antialias: true });
 	renderer.setClearColor(new THREE.Color(0x000000));
 	renderer.setSize(window.innerWidth, window.innerHeight);
 	const myGroup = new THREE.Group();
