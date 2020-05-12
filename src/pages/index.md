@@ -1,19 +1,16 @@
-<!DOCTYPE html>
 <html>
 
 <head>
     <title>Instancing</title>
     <meta charset="UTF-8" />
-    <script type="text/javascript" charset="UTF-8" src="/libs/three/three.js"></script>
-    <script type="text/javascript" charset="UTF-8" src="/libs/three/controls/TrackballControls.js"></script>
-    <script type="text/javascript" src="/libs/util/Stats.js"></script>
-    <script type="text/javascript" src="/libs/util/dat.gui.js"></script>
+    <script type="text/javascript" charset="UTF-8" src="../../libs/three/three.js"></script>
+    <script type="text/javascript" charset="UTF-8" src="../../libs/three/controls/TrackballControls.js"></script>
+    <script type="text/javascript" src="../../libs/util/Stats.js"></script>
+    <script type="text/javascript" src="../../libs/util/dat.gui.js"></script>
 
-    <script type="text/javascript" src="/js/util.js"></script>
-    <link rel="stylesheet" href="/css/default.css">
+    <script type="text/javascript" src="../js/util.js"></script>
+    <link rel="stylesheet" href="../../css/default.css">
 </head>
-	
-
 
 <body>
     <!-- Div which will hold the Output -->
